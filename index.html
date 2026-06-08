@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ЗАО «МЫС» — Промышленное производство</title>
+    <link rel="icon" type="image/jpeg" href="Главная/logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,7 +13,7 @@
         body { font-family: 'Inter', sans-serif; }
         .hero-bg {
             background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
-                        url('images/Главная/2ТЭ25Км-0026.jfif');
+                        url('Главная/2ТЭ25Км-0026.jfif');
             background-size: cover;
             background-position: center;
         }
@@ -120,7 +121,7 @@
     <header class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 py-4">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="index.html" class="flex items-center gap-3">
-                <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto object-contain rounded-md shadow-sm">
+                <img src="Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto object-contain rounded-md shadow-sm">
                 <div class="flex flex-col">
                     <span class="font-bold text-xl leading-none tracking-tight uppercase">ЗАО «МЫС»</span>
                     <span class="text-[9px] text-blue-600 font-bold uppercase tracking-widest mt-0.5">Инженерные решения</span>
@@ -210,10 +211,10 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-6">
                     <div class="w-full aspect-video rounded-xl overflow-hidden shadow-inner bg-slate-100 cursor-pointer group"
-                         data-gallery-img="images/Продукция/Модульные кабины машиниста/Кабина ТЭМ28.jfif" 
+                         data-gallery-img="Продукция/Модульные кабины машиниста/Кабина ТЭМ28.jfif" 
                          data-gallery-title="Модульная кабина ТЭМ28"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Продукция/Модульные кабины машиниста/Кабина ТЭМ28.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="Продукция/Модульные кабины машиниста/Кабина ТЭМ28.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div>
                         <h4 class="text-lg font-bold mb-2 uppercase">Модульные кабины</h4>
@@ -223,10 +224,10 @@
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-6">
                     <div class="w-full aspect-video rounded-xl overflow-hidden shadow-inner bg-slate-100 cursor-pointer group"
-                         data-gallery-img="images/Продукция/Вентиляторы для локомотивов/Вентилятор охлаждения радиаторов холодильной камеры тепловозов типа 2ТЭ25.jpg" 
+                         data-gallery-img="Продукция/Вентиляторы для локомотивов/Вентилятор охлаждения радиаторов холодильной камеры тепловозов типа 2ТЭ25.jpg" 
                          data-gallery-title="Система вентиляции 2ТЭ25"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Продукция/Вентиляторы для локомотивов/Вентилятор охлаждения радиаторов холодильной камеры тепловозов типа 2ТЭ25.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="Продукция/Вентиляторы для локомотивов/Вентилятор охлаждения радиаторов холодильной камеры тепловозов типа 2ТЭ25.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div>
                         <h4 class="text-lg font-bold mb-2 uppercase">Системы вентиляции</h4>
@@ -236,10 +237,10 @@
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-6">
                     <div class="w-full aspect-video rounded-xl overflow-hidden shadow-inner bg-slate-100 cursor-pointer group"
-                         data-gallery-img="images/Главная/Автоматическая подножка и дверь для пассажирских подвижных составов.jpg" 
+                         data-gallery-img="Главная/Автоматическая подножка и дверь для пассажирских подвижных составов.jpg" 
                          data-gallery-title="Пассажирское оборудование"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Главная/Автоматическая подножка и дверь для пассажирских подвижных составов.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="Главная/Автоматическая подножка и дверь для пассажирских подвижных составов.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div>
                         <h4 class="text-lg font-bold mb-2 uppercase">Пассажирское оборудование</h4>
@@ -249,10 +250,10 @@
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-6">
                     <div class="w-full aspect-video rounded-xl overflow-hidden shadow-inner bg-slate-100 cursor-pointer group"
-                         data-gallery-img="images/Главная/Буферные фонари из композитных материалов.jpg" 
+                         data-gallery-img="Главная/Буферные фонари из композитных материалов.jpg" 
                          data-gallery-title="Композитные детали"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Главная/Буферные фонари из композитных материалов.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="Главная/Буферные фонари из композитных материалов.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div>
                         <h4 class="text-lg font-bold mb-2 uppercase">Композитные детали</h4>
@@ -262,10 +263,10 @@
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-6">
                     <div class="w-full aspect-video rounded-xl overflow-hidden shadow-inner bg-slate-100 cursor-pointer group"
-                         data-gallery-img="images/Главная/Широкозахватная дождевальная машина (ШДМ).jpg" 
+                         data-gallery-img="Главная/Широкозахватная дождевальная машина (ШДМ).jpg" 
                          data-gallery-title="Широкозахватная дождевальная машина"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Главная/Широкозахватная дождевальная машина (ШДМ).jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="Главная/Широкозахватная дождевальная машина (ШДМ).jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div>
                         <h4 class="text-lg font-bold mb-2 uppercase">Промышленное оборудование</h4>
@@ -275,10 +276,10 @@
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-6">
                     <div class="w-full aspect-video rounded-xl overflow-hidden shadow-inner bg-slate-100 cursor-pointer group"
-                         data-gallery-img="images/Главная/Трубы из стеклопластика.jpg" 
+                         data-gallery-img="Главная/Трубы из стеклопластика.jpg" 
                          data-gallery-title="Трубы из стеклопластика"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Главная/Трубы из стеклопластика.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="Главная/Трубы из стеклопластика.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div>
                         <h4 class="text-lg font-bold mb-2 uppercase">Стеклопластиковые трубы</h4>
@@ -316,7 +317,7 @@
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="group cursor-pointer">
                     <div class="aspect-video rounded-xl overflow-hidden mb-5">
-                        <img src="images/Главная/Губернатор Калужской области Владислав Шапша посетил ЗАО «МЫС».jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="Главная/Губернатор Калужской области Владислав Шапша посетил ЗАО «МЫС».jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="text-blue-600 font-bold text-[10px] uppercase mb-3">Июнь 2025</div>
                     <h5 class="text-lg font-bold leading-tight mb-3 uppercase">Визит губернатора на производство</h5>
@@ -324,7 +325,7 @@
                 </div>
                 <div class="group cursor-pointer">
                     <div class="aspect-video rounded-xl overflow-hidden mb-5">
-                        <img src="images/Главная/«Пространство 1520 PROДвижение.Экспо».jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="Главная/«Пространство 1520 PROДвижение.Экспо».jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="text-blue-600 font-bold text-[10px] uppercase mb-3">Октябрь 2025</div>
                     <h5 class="text-lg font-bold leading-tight mb-3 uppercase">Участие в PRO//Движение.Экспо</h5>
@@ -332,7 +333,7 @@
                 </div>
                 <div class="group cursor-pointer">
                     <div class="aspect-video rounded-xl overflow-hidden mb-5">
-                        <img src="images/Главная/ЗАО «МЫС» успешно прошло аудит по ISO 221632023.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="Главная/ЗАО «МЫС» успешно прошло аудит по ISO 221632023.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="text-blue-600 font-bold text-[10px] uppercase mb-3">Май 2025</div>
                     <h5 class="text-lg font-bold leading-tight mb-3 uppercase">Успешный аудит ISO 22163</h5>
@@ -347,14 +348,14 @@
         <div class="container mx-auto px-6">
             <h4 class="text-center text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] mb-10">Наши ключевые партнеры</h4>
             <div class="flex flex-wrap justify-center items-center gap-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
-                <img src="images/Главная/БМЗ.png" alt="БМЗ" class="h-10 w-auto">
-                <img src="images/Главная/ЛТЗ.gif" alt="ЛТЗ" class="h-10 w-auto">
-                <img src="images/Главная/ОАО КОЛОМЕНСКИЙ ЗАВОД.jpg" alt="Коломенский завод" class="h-10 w-auto">
-                <img src="images/Главная/СИНАРАТРАНСПОРТНЫЕМАШИНЫ (СТМ).jpg" alt="Синара" class="h-8 w-auto">
-                <img src="images/Главная/ЛокоТех (ТМХ-Сервис).jpg" alt="ЛокоТех" class="h-8 w-auto">
-                <img src="images/Главная/ЛокоТех ЖЕЛДОРРЕММАШ.jpg" alt="Желдорреммаш" class="h-8 w-auto">
-                <img src="images/Главная/РПМ группа.png" alt="РПМ" class="h-8 w-auto">
-                <img src="images/Главная/Уральские локомотивы.png" alt="Уральские локомотивы" class="h-10 w-auto">
+                <img src="Главная/БМЗ.png" alt="БМЗ" class="h-10 w-auto">
+                <img src="Главная/ЛТЗ.gif" alt="ЛТЗ" class="h-10 w-auto">
+                <img src="Главная/ОАО КОЛОМЕНСКИЙ ЗАВОД.jpg" alt="Коломенский завод" class="h-10 w-auto">
+                <img src="Главная/СИНАРАТРАНСПОРТНЫЕМАШИНЫ (СТМ).jpg" alt="Синара" class="h-8 w-auto">
+                <img src="Главная/ЛокоТех (ТМХ-Сервис).jpg" alt="ЛокоТех" class="h-8 w-auto">
+                <img src="Главная/ЛокоТех ЖЕЛДОРРЕММАШ.jpg" alt="Желдорреммаш" class="h-8 w-auto">
+                <img src="Главная/РПМ группа.png" alt="РПМ" class="h-8 w-auto">
+                <img src="Главная/Уральские локомотивы.png" alt="Уральские локомотивы" class="h-10 w-auto">
             </div>
         </div>
     </section>
@@ -365,7 +366,7 @@
             <div class="grid md:grid-cols-4 gap-12 mb-12">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
-                        <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto grayscale brightness-200 rounded">
+                        <img src="Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto grayscale brightness-200 rounded">
                         <span class="font-bold text-xl text-white uppercase tracking-tight">ЗАО «МЫС»</span>
                     </div>
                     <p class="text-sm leading-relaxed max-w-sm mb-6">

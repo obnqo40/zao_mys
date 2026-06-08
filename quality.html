@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ЗАО «МЫС» — Качество и Сертификация</title>
+    <title>ЗАО «МЫС» — Качество и Сертификаты</title>
+    <link rel="icon" type="image/jpeg" href="Главная/logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -119,7 +120,7 @@
     <header class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 py-4">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="index.html" class="flex items-center gap-3">
-                <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto object-contain rounded-md shadow-sm">
+                <img src="Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto object-contain rounded-md shadow-sm">
                 <div class="flex flex-col">
                     <span class="font-bold text-xl leading-none tracking-tight uppercase">ЗАО «МЫС»</span>
                     <span class="text-[9px] text-blue-600 font-bold uppercase tracking-widest mt-0.5">Инженерные решения</span>
@@ -184,10 +185,10 @@
                 <!-- ISO 22163 -->
                 <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
                     <div class="aspect-[3/4] p-6 cursor-pointer group" 
-                         data-gallery-img="images/Качество/ISO 22163.jpg" 
+                         data-gallery-img="Качество/ISO 22163.jpg" 
                          data-gallery-title="Сертификат ISO 22163 (IRIS)"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Качество/ISO 22163.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                        <img src="Качество/ISO 22163.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-8">
                         <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ISO 22163 (IRIS)</h3>
@@ -198,10 +199,10 @@
                 <!-- ISO 9001 RU -->
                 <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
                     <div class="aspect-[3/4] p-6 cursor-pointer group" 
-                         data-gallery-img="images/Качество/ISO 9001 RU.jpg" 
+                         data-gallery-img="Качество/ISO 9001 RU.jpg" 
                          data-gallery-title="Сертификат ISO 9001:2015 (RU)"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Качество/ISO 9001 RU.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                        <img src="Качество/ISO 9001 RU.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-8">
                         <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ISO 9001:2015</h3>
@@ -212,10 +213,10 @@
                 <!-- ISO 9001 EN -->
                 <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
                     <div class="aspect-[3/4] p-6 cursor-pointer group" 
-                         data-gallery-img="images/Качество/ISO 9001 EN.jpg" 
+                         data-gallery-img="Качество/ISO 9001 EN.jpg" 
                          data-gallery-title="Сертификат ISO 9001:2015 (EN)"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Качество/ISO 9001 EN.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                        <img src="Качество/ISO 9001 EN.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-8">
                         <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ISO 9001:2015</h3>
@@ -226,10 +227,10 @@
                 <!-- ГОСТ Р ИСО 9001 -->
                 <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
                     <div class="aspect-[3/4] p-6 cursor-pointer group" 
-                         data-gallery-img="images/Качество/Сертификат ГОСТ Р ИСО 9001 - 2015.jpg" 
+                         data-gallery-img="Качество/Сертификат ГОСТ Р ИСО 9001 - 2015.jpg" 
                          data-gallery-title="Сертификат ГОСТ Р ИСО 9001"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Качество/Сертификат ГОСТ Р ИСО 9001 - 2015.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                        <img src="Качество/Сертификат ГОСТ Р ИСО 9001 - 2015.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-8">
                         <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ГОСТ Р ИСО 9001</h3>
@@ -240,10 +241,10 @@
                 <!-- Благодарственное письмо -->
                 <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
                     <div class="aspect-[3/4] p-6 cursor-pointer group" 
-                         data-gallery-img="images/Качество/Благодарственное письмо DQS о сотрудничестве.jpg" 
+                         data-gallery-img="Качество/Благодарственное письмо DQS о сотрудничестве.jpg" 
                          data-gallery-title="Благодарственное письмо DQS"
                          @click="openLightbox($el.dataset.galleryImg)">
-                        <img src="images/Качество/Благодарственное письмо DQS о сотрудничестве.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                        <img src="Качество/Благодарственное письмо DQS о сотрудничестве.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-8">
                         <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">Благодарность DQS</h3>
@@ -295,7 +296,7 @@
             <div class="grid md:grid-cols-4 gap-12 mb-12">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
-                        <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto grayscale brightness-200 rounded">
+                        <img src="Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto grayscale brightness-200 rounded">
                         <span class="font-bold text-xl text-white uppercase tracking-tight">ЗАО «МЫС»</span>
                     </div>
                     <p class="text-sm leading-relaxed max-w-sm mb-6">
