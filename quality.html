@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЗАО «МЫС» — Качество и Сертификация</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .nav-link { transition: all 0.2s; }
+        .nav-link:hover { color: #2563eb; }
+        .cert-card {
+            transition: all 0.3s ease;
+        }
+        .cert-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-white text-slate-900" 
+      x-data="{ 
+        mobileMenu: false, 
+        lightbox: false, 
+        lbImg: '', 
+        lbTitle: '', 
+        zoom: 1,
+        gallery: [],
+        currentIndex: 0,
+        initGallery() {
+            this.gallery = Array.from(document.querySelectorAll('[data-gallery-img]')).map(el => ({
+                img: el.getAttribute('data-gallery-img'),
+                title: el.getAttribute('data-gallery-title')
+            }));
+        },
+        openLightbox(img) {
+            this.initGallery();
+            this.currentIndex = this.gallery.findIndex(item => item.img === img);
+            this.updateLightbox();
+            this.lightbox = true;
+        },
+        next() {
+            this.currentIndex = (this.currentIndex + 1) % this.gallery.length;
+            this.updateLightbox();
+        },
+        prev() {
+            this.currentIndex = (this.currentIndex - 1 + this.gallery.length) % this.gallery.length;
+            this.updateLightbox();
+        },
+        updateLightbox() {
+            this.lbImg = this.gallery[this.currentIndex].img;
+            this.lbTitle = this.gallery[this.currentIndex].title;
+            this.zoom = 1;
+        }
+      }"
+      @keydown.left.window="if(lightbox) prev()"
+      @keydown.right.window="if(lightbox) next()"
+      @keydown.escape.window="lightbox = false">
+
+    <!-- Lightbox -->
+    <div x-show="lightbox" x-cloak
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center select-none"
+         @click="lightbox = false">
+        
+        <!-- Controls -->
+        <div class="absolute top-0 w-full p-6 flex justify-between items-center z-[110]" @click.stop>
+            <div class="text-white/70 text-sm font-medium">
+                <span x-text="currentIndex + 1"></span> / <span x-text="gallery.length"></span>
+            </div>
+            <div class="flex items-center gap-6">
+                <button @click="zoom = zoom === 1 ? 2.5 : 1" class="text-white/70 hover:text-white transition-colors p-2">
+                    <i data-lucide="zoom-in" x-show="zoom === 1"></i>
+                    <i data-lucide="zoom-out" x-show="zoom !== 1"></i>
+                </button>
+                <button @click="lightbox = false" class="text-white/70 hover:text-white transition-colors p-2">
+                    <i data-lucide="x" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button @click.stop="prev()" class="absolute left-6 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 hidden md:block z-[110]">
+            <i data-lucide="chevron-left" class="w-12 h-12"></i>
+        </button>
+        <button @click.stop="next()" class="absolute right-6 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 hidden md:block z-[110]">
+            <i data-lucide="chevron-right" class="w-12 h-12"></i>
+        </button>
+
+        <!-- Image Container -->
+        <div class="relative w-full h-full flex items-center justify-center p-4 md:p-12 overflow-hidden">
+            <div class="relative transition-transform duration-300 ease-out cursor-zoom-in" 
+                 :style="`transform: scale(${zoom}); cursor: ${zoom > 1 ? 'zoom-out' : 'zoom-in'}`"
+                 @click.stop="zoom = zoom === 1 ? 2.5 : 1">
+                <img :src="lbImg" class="max-h-[75vh] md:max-h-[80vh] w-auto rounded shadow-2xl pointer-events-none">
+            </div>
+            <div class="absolute bottom-12 text-center max-w-2xl px-4 z-[110] transition-all duration-300" 
+                 :class="zoom > 1 ? 'opacity-0 translate-y-8 pointer-events-none' : 'opacity-100 translate-y-0'"
+                 @click.stop>
+                <h3 class="text-white font-bold text-lg md:text-xl uppercase tracking-tight" x-text="lbTitle"></h3>
+                <div class="h-1 w-12 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Mobile Swipe Hint / Controls -->
+        <div class="absolute bottom-10 flex gap-10 md:hidden z-[110]" @click.stop>
+            <button @click="prev()" class="text-white/50 p-4"><i data-lucide="chevron-left"></i></button>
+            <button @click="next()" class="text-white/50 p-4"><i data-lucide="chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Навигация -->
+    <header class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto object-contain rounded-md shadow-sm">
+                <div class="flex flex-col">
+                    <span class="font-bold text-xl leading-none tracking-tight uppercase">ЗАО «МЫС»</span>
+                    <span class="text-[9px] text-blue-600 font-bold uppercase tracking-widest mt-0.5">Инженерные решения</span>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="about.html" class="nav-link">Компания</a>
+                <a href="products.html" class="nav-link">Продукция</a>
+                <a href="news.html" class="nav-link">Новости</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+                <a href="quality.html" class="text-blue-600">Качество</a>
+            </nav>
+
+            <div class="hidden md:flex items-center gap-6">
+                <a href="tel:+74843223242" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors">
+                    +7 (48432) 23-242
+                </a>
+                <a href="contacts.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-bold transition-all shadow-md shadow-blue-100">
+                    Связаться
+                </a>
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 text-slate-600">
+                <i data-lucide="menu" x-show="!mobileMenu"></i>
+                <i data-lucide="x" x-show="mobileMenu"></i>
+            </button>
+        </div>
+
+        <!-- Мобильное меню -->
+        <div x-show="mobileMenu" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="lg:hidden bg-white border-b border-slate-100 absolute w-full left-0 py-6 px-6 shadow-xl">
+            <nav class="flex flex-col gap-4 text-sm font-semibold text-slate-600">
+                <a href="index.html" class="hover:text-blue-600">Главная</a>
+                <a href="about.html" class="hover:text-blue-600">Компания</a>
+                <a href="products.html" class="hover:text-blue-600">Продукция</a>
+                <a href="news.html" class="hover:text-blue-600">Новости</a>
+                <a href="contacts.html" class="hover:text-blue-600">Контакты</a>
+                <a href="quality.html" class="text-blue-600">Качество</a>
+                <hr class="my-2 border-slate-100">
+                <a href="tel:+74843223242" class="flex items-center gap-2 text-slate-700">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                    +7 (48432) 23-242
+                </a>
+                <a href="contacts.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-center">Связаться</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-24">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight uppercase">Качество</h1>
+                <p class="text-slate-500 font-medium">Безупречное качество — основа нашей репутации и залог надежности выпускаемой продукции.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mb-20">
+                <!-- ISO 22163 -->
+                <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+                    <div class="aspect-[3/4] p-6 cursor-pointer group" 
+                         data-gallery-img="images/Качество/ISO 22163.jpg" 
+                         data-gallery-title="Сертификат ISO 22163 (IRIS)"
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Качество/ISO 22163.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ISO 22163 (IRIS)</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Международный стандарт железнодорожной промышленности.</p>
+                    </div>
+                </div>
+
+                <!-- ISO 9001 RU -->
+                <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+                    <div class="aspect-[3/4] p-6 cursor-pointer group" 
+                         data-gallery-img="images/Качество/ISO 9001 RU.jpg" 
+                         data-gallery-title="Сертификат ISO 9001:2015 (RU)"
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Качество/ISO 9001 RU.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ISO 9001:2015</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Система менеджмента качества (Русская версия).</p>
+                    </div>
+                </div>
+
+                <!-- ISO 9001 EN -->
+                <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+                    <div class="aspect-[3/4] p-6 cursor-pointer group" 
+                         data-gallery-img="images/Качество/ISO 9001 EN.jpg" 
+                         data-gallery-title="Сертификат ISO 9001:2015 (EN)"
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Качество/ISO 9001 EN.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ISO 9001:2015</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Система менеджмента качества (English version).</p>
+                    </div>
+                </div>
+
+                <!-- ГОСТ Р ИСО 9001 -->
+                <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+                    <div class="aspect-[3/4] p-6 cursor-pointer group" 
+                         data-gallery-img="images/Качество/Сертификат ГОСТ Р ИСО 9001 - 2015.jpg" 
+                         data-gallery-title="Сертификат ГОСТ Р ИСО 9001"
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Качество/Сертификат ГОСТ Р ИСО 9001 - 2015.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">ГОСТ Р ИСО 9001</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Национальный стандарт Российской Федерации.</p>
+                    </div>
+                </div>
+
+                <!-- Благодарственное письмо -->
+                <div class="cert-card bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+                    <div class="aspect-[3/4] p-6 cursor-pointer group" 
+                         data-gallery-img="images/Качество/Благодарственное письмо DQS о сотрудничестве.jpg" 
+                         data-gallery-title="Благодарственное письмо DQS"
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Качество/Благодарственное письмо DQS о сотрудничестве.jpg" class="w-full h-full object-contain shadow-sm bg-white rounded-lg group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-lg font-bold mb-2 uppercase tracking-tight">Благодарность DQS</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Письмо от международного органа по сертификации.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 rounded-3xl p-10 md:p-16 border border-slate-100">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-extrabold tracking-tight mb-10 uppercase text-slate-900">Политика в области качества</h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6 items-start">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0 text-blue-600">
+                                <i data-lucide="award"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">Сертификация IRIS</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed">ЗАО «МЫС» успешно подтверждает соответствие требованиям международного стандарта ISO 22163, что гарантирует высокое качество продукции для мировых лидеров ж/д отрасли.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 items-start">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0 text-blue-600">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">ISO 3834-2</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed">Соответствие требованиям к качеству выполнения сварочных работ, что критически важно для производства металлических каркасов кабин и вентиляционных систем.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 items-start">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0 text-blue-600">
+                                <i data-lucide="check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">Многоступенчатый контроль</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed">Собственная лаборатория и отдел технического контроля (ОТК) обеспечивают проверку изделий на всех этапах: от входного контроля сырья до финальных испытаний готовой продукции.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-slate-900 py-16 text-slate-400">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto grayscale brightness-200 rounded">
+                        <span class="font-bold text-xl text-white uppercase tracking-tight">ЗАО «МЫС»</span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-sm mb-6">
+                        Проектирование и производство высокотехнологичных изделий из композиционных материалов для железнодорожного транспорта и промышленности.
+                    </p>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-xs uppercase tracking-widest mb-6">Навигация</h5>
+                    <ul class="space-y-4 text-sm font-semibold uppercase tracking-wider">
+                        <li><a href="about.html" class="hover:text-blue-400 transition-colors">Компания</a></li>
+                        <li><a href="products.html" class="hover:text-blue-400 transition-colors">Продукция</a></li>
+                        <li><a href="news.html" class="hover:text-blue-400 transition-colors">Новости</a></li>
+                        <li><a href="quality.html" class="hover:text-blue-400 transition-colors">Качество</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-xs uppercase tracking-widest mb-6">Контакты</h5>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-4 h-4 text-blue-500"></i>
+                            <span class="font-bold">+7 (48432) 23-242</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-500"></i>
+                            <span>info@mpsplastik.ru</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-500 mt-1"></i>
+                            <span>Калужская обл., Жуковский р-н, с. Высокиничи</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] uppercase tracking-widest">© 2026 ЗАО «МЫС». Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

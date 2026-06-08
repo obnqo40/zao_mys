@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЗАО «МЫС» — О компании</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .nav-link { transition: all 0.2s; }
+        .nav-link:hover { color: #2563eb; }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-white text-slate-900" 
+      x-data="{ 
+        mobileMenu: false, 
+        lightbox: false, 
+        lbImg: '', 
+        lbTitle: '', 
+        zoom: 1,
+        gallery: [],
+        currentIndex: 0,
+        initGallery() {
+            this.gallery = Array.from(document.querySelectorAll('[data-gallery-img]')).map(el => ({
+                img: el.getAttribute('data-gallery-img'),
+                title: el.getAttribute('data-gallery-title')
+            }));
+        },
+        openLightbox(img) {
+            this.initGallery();
+            this.currentIndex = this.gallery.findIndex(item => item.img === img);
+            this.updateLightbox();
+            this.lightbox = true;
+        },
+        next() {
+            this.currentIndex = (this.currentIndex + 1) % this.gallery.length;
+            this.updateLightbox();
+        },
+        prev() {
+            this.currentIndex = (this.currentIndex - 1 + this.gallery.length) % this.gallery.length;
+            this.updateLightbox();
+        },
+        updateLightbox() {
+            this.lbImg = this.gallery[this.currentIndex].img;
+            this.lbTitle = this.gallery[this.currentIndex].title;
+            this.zoom = 1;
+        }
+      }"
+      @keydown.left.window="if(lightbox) prev()"
+      @keydown.right.window="if(lightbox) next()"
+      @keydown.escape.window="lightbox = false">
+
+    <!-- Lightbox -->
+    <div x-show="lightbox" x-cloak
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center select-none"
+         @click="lightbox = false">
+        
+        <!-- Controls -->
+        <div class="absolute top-0 w-full p-6 flex justify-between items-center z-[110]" @click.stop>
+            <div class="text-white/70 text-sm font-medium">
+                <span x-text="currentIndex + 1"></span> / <span x-text="gallery.length"></span>
+            </div>
+            <div class="flex items-center gap-6">
+                <button @click="zoom = zoom === 1 ? 2.5 : 1" class="text-white/70 hover:text-white transition-colors p-2">
+                    <i data-lucide="zoom-in" x-show="zoom === 1"></i>
+                    <i data-lucide="zoom-out" x-show="zoom !== 1"></i>
+                </button>
+                <button @click="lightbox = false" class="text-white/70 hover:text-white transition-colors p-2">
+                    <i data-lucide="x" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button @click.stop="prev()" class="absolute left-6 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 hidden md:block z-[110]">
+            <i data-lucide="chevron-left" class="w-12 h-12"></i>
+        </button>
+        <button @click.stop="next()" class="absolute right-6 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 hidden md:block z-[110]">
+            <i data-lucide="chevron-right" class="w-12 h-12"></i>
+        </button>
+
+        <!-- Image Container -->
+        <div class="relative w-full h-full flex items-center justify-center p-4 md:p-12 overflow-hidden">
+            <div class="relative transition-transform duration-300 ease-out cursor-zoom-in" 
+                 :style="`transform: scale(${zoom}); cursor: ${zoom > 1 ? 'zoom-out' : 'zoom-in'}`"
+                 @click.stop="zoom = zoom === 1 ? 2.5 : 1">
+                <img :src="lbImg" class="max-h-[75vh] md:max-h-[80vh] w-auto rounded shadow-2xl pointer-events-none">
+            </div>
+            <div class="absolute bottom-12 text-center max-w-2xl px-4 z-[110] transition-all duration-300" 
+                 :class="zoom > 1 ? 'opacity-0 translate-y-8 pointer-events-none' : 'opacity-100 translate-y-0'"
+                 @click.stop>
+                <h3 class="text-white font-bold text-lg md:text-xl uppercase tracking-tight" x-text="lbTitle"></h3>
+                <div class="h-1 w-12 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Mobile Swipe Hint / Controls -->
+        <div class="absolute bottom-10 flex gap-10 md:hidden z-[110]" @click.stop>
+            <button @click="prev()" class="text-white/50 p-4"><i data-lucide="chevron-left"></i></button>
+            <button @click="next()" class="text-white/50 p-4"><i data-lucide="chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Навигация -->
+    <header class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto object-contain rounded-md shadow-sm">
+                <div class="flex flex-col">
+                    <span class="font-bold text-xl leading-none tracking-tight uppercase">ЗАО «МЫС»</span>
+                    <span class="text-[9px] text-blue-600 font-bold uppercase tracking-widest mt-0.5">Инженерные решения</span>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="about.html" class="text-blue-600">Компания</a>
+                <a href="products.html" class="nav-link">Продукция</a>
+                <a href="news.html" class="nav-link">Новости</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+                <a href="quality.html" class="nav-link">Качество</a>
+            </nav>
+
+            <div class="hidden md:flex items-center gap-6">
+                <a href="tel:+74843223242" class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors">
+                    +7 (48432) 23-242
+                </a>
+                <a href="contacts.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-bold transition-all shadow-md shadow-blue-100">
+                    Связаться
+                </a>
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 text-slate-600">
+                <i data-lucide="menu" x-show="!mobileMenu"></i>
+                <i data-lucide="x" x-show="mobileMenu"></i>
+            </button>
+        </div>
+
+        <!-- Мобильное меню -->
+        <div x-show="mobileMenu" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="lg:hidden bg-white border-b border-slate-100 absolute w-full left-0 py-6 px-6 shadow-xl">
+            <nav class="flex flex-col gap-4 text-sm font-semibold text-slate-600">
+                <a href="index.html" class="hover:text-blue-600">Главная</a>
+                <a href="about.html" class="text-blue-600">Компания</a>
+                <a href="products.html" class="hover:text-blue-600">Продукция</a>
+                <a href="news.html" class="hover:text-blue-600">Новости</a>
+                <a href="contacts.html" class="hover:text-blue-600">Контакты</a>
+                <a href="quality.html" class="hover:text-blue-600">Качество</a>
+                <hr class="my-2 border-slate-100">
+                <a href="tel:+74843223242" class="flex items-center gap-2 text-slate-700">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                    +7 (48432) 23-242
+                </a>
+                <a href="contacts.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-center">Связаться</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight uppercase">О компании</h1>
+                <p class="text-slate-500 font-medium">История успеха и инженерных достижений с 1990 года.</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-100">
+                    <img src="images/Главная/2(3) ТЭ25КМ эскизный проект.jpg" class="w-full h-auto object-cover" alt="Проект ТЭ25КМ">
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold mb-6 text-slate-900 uppercase tracking-tight">Лидер в производстве композитов</h2>
+                    <p class="text-slate-600 leading-relaxed mb-6 text-sm">ЗАО «МЫС» — это современное высокотехнологичное производство, специализирующееся на проектировании и изготовлении изделий из композиционных материалов и металла. Мы являемся одним из ключевых поставщиков для ОАО «РЖД» и крупнейших машиностроительных холдингов России.</p>
+                    <p class="text-slate-600 leading-relaxed text-sm mb-6">Приоритетное направление деятельности компании – изготовление комплектующего оборудования для подвижного состава: модульных кабин машиниста, обтекателей электровозов, интерьеров кабин и пассажирских вагонов. Мы также специализируемся на производстве элементов транспортных вентиляционных систем: лопастей, вентиляционных установок в сборе и систем шумоглушения.</p>
+                    <p class="text-slate-600 leading-relaxed text-sm">Инновационные технологии, применяемые на нашем производстве, позволяют существенно увеличить срок службы подвижного состава и обеспечивают эффективное импортозамещение в критически важных отраслях транспорта.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-24">
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-6">
+                        <i data-lucide="cpu"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3 uppercase tracking-tight">Технологии</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Использование передовых методов формования и проектирования для создания сверхлегких и прочных конструкций.</p>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-6">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3 uppercase tracking-tight">Качество</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Строгий контроль на каждом этапе производства и сертификация по международному стандарту ISO 22163 (IRIS).</p>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-6">
+                        <i data-lucide="history"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3 uppercase tracking-tight">Опыт</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Более 30 лет успешной работы и сотни реализованных проектов для ведущих транспортных компаний России и СНГ.</p>
+                </div>
+            </div>
+
+            <!-- Раздел: Технологии (Галерея) -->
+            <section class="mb-24">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="h-10 w-1 bg-blue-600"></div>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Производственные технологии</h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/33cbb5fb75e7b30342a4bfc0e72ba7a5.jpg" 
+                         data-gallery-title="Технологический процесс" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/33cbb5fb75e7b30342a4bfc0e72ba7a5.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/6950ba9dddec4d1a7d8a40d35a9c6224.jpg" 
+                         data-gallery-title="Производственная площадка" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/6950ba9dddec4d1a7d8a40d35a9c6224.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/7d9deb19b887a637049b372f0624bad5.jpg" 
+                         data-gallery-title="Контроль качества" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/7d9deb19b887a637049b372f0624bad5.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/9f0effd7fd10c2244856ad4af09dff56.jpg" 
+                         data-gallery-title="Обработка композитов" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/9f0effd7fd10c2244856ad4af09dff56.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/afe8e9d8a9b4e22eb026ab2462756360.jpg" 
+                         data-gallery-title="Высокоточное оборудование" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/afe8e9d8a9b4e22eb026ab2462756360.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/mpz1yzali2eoytn5lzjd08tx68z3gf9k.jpg" 
+                         data-gallery-title="Цех сборки" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/mpz1yzali2eoytn5lzjd08tx68z3gf9k.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <!-- Дополнительные фото технологий -->
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/45940d0a05bafa4f93e273fdf38ac273.jfif" 
+                         data-gallery-title="Технологическая линия" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/45940d0a05bafa4f93e273fdf38ac273.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/54694e5ede12007944d380547c95f72c.jfif" 
+                         data-gallery-title="Оборудование ЧПУ" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/54694e5ede12007944d380547c95f72c.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/5580fe4c7c8555e632ebd6b222aa2bf7.jfif" 
+                         data-gallery-title="Формовка изделий" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/5580fe4c7c8555e632ebd6b222aa2bf7.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/860ffce70a02ea1d9ad41298da148ee7.jfif" 
+                         data-gallery-title="Рабочий процесс" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/860ffce70a02ea1d9ad41298da148ee7.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/a0d273dc70dbc2fc541993d291cb9979.jfif" 
+                         data-gallery-title="Инженерный контроль" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/a0d273dc70dbc2fc541993d291cb9979.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Технологии/e062577107a7da6a505147c2a20b7a89.jfif" 
+                         data-gallery-title="Готовая продукция" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Технологии/e062577107a7da6a505147c2a20b7a89.jfif" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                 </div>
+            </section>
+
+            <!-- Раздел: Обслуживание (Галерея) -->
+            <section>
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="h-10 w-1 bg-indigo-600"></div>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Сервисное обслуживание</h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/16p6fo02j3b8br0bhdz6ypq8euqka14k.jpeg" 
+                         data-gallery-title="Техническое обслуживание" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/16p6fo02j3b8br0bhdz6ypq8euqka14k.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/1h5zbpe4va6hj0gaak3dgabisvd3edqm.jpeg" 
+                         data-gallery-title="Проверка систем" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/1h5zbpe4va6hj0gaak3dgabisvd3edqm.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/3j2xsdvdrwnb3sita4y4zbeg53yqzjmn.jpeg" 
+                         data-gallery-title="Ремонтные работы" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/3j2xsdvdrwnb3sita4y4zbeg53yqzjmn.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/6yq779c8cyad2im1sizylkwgvg4m88p8.jpeg" 
+                         data-gallery-title="Сервисный центр" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/6yq779c8cyad2im1sizylkwgvg4m88p8.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/8q1qchyhcv9d3l9kb3t0yxyo0s48y3kk.jpeg" 
+                         data-gallery-title="Диагностика" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/8q1qchyhcv9d3l9kb3t0yxyo0s48y3kk.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <!-- Дополнительные фото обслуживания -->
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/abfvkloq5h2xbsa640akvi2gttsn2b41.jpeg" 
+                         data-gallery-title="Сервисные работы" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/abfvkloq5h2xbsa640akvi2gttsn2b41.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/degl6ji1xk79qhp38k2w53fvlzm62h68.jpeg" 
+                         data-gallery-title="Технический осмотр" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/degl6ji1xk79qhp38k2w53fvlzm62h68.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/mmnikorcuivaw5vfdw8y6yakf77da3p9.jpeg" 
+                         data-gallery-title="Профилактика" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/mmnikorcuivaw5vfdw8y6yakf77da3p9.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/sjc3lu0gybikf497opx71b0w25ac11z7.jpeg" 
+                         data-gallery-title="Замена узлов" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/sjc3lu0gybikf497opx71b0w25ac11z7.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/vbo9kdu6p8m8i1n2ugyg0laerfoxprcs.jpeg" 
+                         data-gallery-title="Мастерская" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/vbo9kdu6p8m8i1n2ugyg0laerfoxprcs.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <!-- Дополнительные фото обслуживания -->
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/1ixhb8nhj2hceobm3hzzbb813mtybbc0.jpeg" 
+                         data-gallery-title="Контроль систем" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/1ixhb8nhj2hceobm3hzzbb813mtybbc0.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/3t9srz6cn7vp5gq5b6zid0ipwkn1sdgt.jpeg" 
+                         data-gallery-title="Технический центр" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/3t9srz6cn7vp5gq5b6zid0ipwkn1sdgt.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/7qs3irq8zni5v42i5r2l81tsuffs3rdt.jpeg" 
+                         data-gallery-title="Инспекция" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/7qs3irq8zni5v42i5r2l81tsuffs3rdt.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/9vrc957bs794pu8a7scaaamxweyy5kd4.jpeg" 
+                         data-gallery-title="Сервис локомотивов" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/9vrc957bs794pu8a7scaaamxweyy5kd4.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/cpu4q7k78eiqrzsswo47epi2zohxab19.jpeg" 
+                         data-gallery-title="Электроника" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/cpu4q7k78eiqrzsswo47epi2zohxab19.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/ek6p07th7r5p490ssbreas22a6im7kjk.jpeg" 
+                         data-gallery-title="Рабочая зона" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/ek6p07th7r5p490ssbreas22a6im7kjk.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/niqfyo5luoje6evsevnlmhnhp6nrta5t.jpeg" 
+                         data-gallery-title="Технический склад" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/niqfyo5luoje6evsevnlmhnhp6nrta5t.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/uc635qoq0rlxn9i80thyl4lt7ijmyg7s.jpeg" 
+                         data-gallery-title="Монтаж" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/uc635qoq0rlxn9i80thyl4lt7ijmyg7s.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/ud89xfsbyuteyuow6cg49pp71pc64hn8.jpeg" 
+                         data-gallery-title="Лаборатория" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/ud89xfsbyuteyuow6cg49pp71pc64hn8.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" 
+                         data-gallery-img="images/Обслуживание/vn93ac3ouh6brn8mzl4blgnrub0fswz7.jpeg" 
+                         data-gallery-title="Готовность к отгрузке" 
+                         @click="openLightbox($el.dataset.galleryImg)">
+                        <img src="images/Обслуживание/vn93ac3ouh6brn8mzl4blgnrub0fswz7.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                 </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-slate-900 py-16 text-slate-400">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="images/Главная/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto grayscale brightness-200 rounded">
+                        <span class="font-bold text-xl text-white uppercase tracking-tight">ЗАО «МЫС»</span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-sm mb-6">
+                        Проектирование и производство высокотехнологичных изделий из композиционных материалов для железнодорожного транспорта и промышленности.
+                    </p>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-xs uppercase tracking-widest mb-6">Навигация</h5>
+                    <ul class="space-y-4 text-sm font-semibold uppercase tracking-wider">
+                        <li><a href="about.html" class="hover:text-blue-400 transition-colors">Компания</a></li>
+                        <li><a href="products.html" class="hover:text-blue-400 transition-colors">Продукция</a></li>
+                        <li><a href="news.html" class="hover:text-blue-400 transition-colors">Новости</a></li>
+                        <li><a href="quality.html" class="hover:text-blue-400 transition-colors">Качество</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-xs uppercase tracking-widest mb-6">Контакты</h5>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-4 h-4 text-blue-500"></i>
+                            <span class="font-bold">+7 (48432) 23-242</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-500"></i>
+                            <span>info@mpsplastik.ru</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-500 mt-1"></i>
+                            <span>Калужская обл., Жуковский р-н, с. Высокиничи</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] uppercase tracking-widest">© 2026 ЗАО «МЫС». Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
