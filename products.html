@@ -194,9 +194,9 @@
     </div>
 
     <!-- Навигация -->
-    <header class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 py-4">
-        <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="index.html" class="flex items-center gap-3">
+    <header class="site-header fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 py-4">
+        <div class="site-header-row container mx-auto px-4 sm:px-6 flex justify-between items-center">
+            <a href="index.html" class="site-brand flex items-center gap-3">
                 <img src="%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto object-contain rounded-md shadow-sm">
                 <div class="flex flex-col">
                     <span class="font-bold text-xl leading-none tracking-tight uppercase">ЗАО «МЫС»</span>
@@ -233,7 +233,7 @@
              x-transition:enter="transition ease-out duration-200"
              x-transition:enter-start="opacity-0 -translate-y-4"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="lg:hidden bg-white border-b border-slate-100 absolute w-full left-0 py-6 px-6 shadow-xl">
+             class="site-mobile-menu lg:hidden bg-white border-b border-slate-100 absolute w-full left-0 py-5 px-4 sm:px-6 shadow-xl">
             <nav class="flex flex-col gap-4 text-sm font-semibold text-slate-600">
                 <a href="index.html" class="hover:text-blue-600">Главная</a>
                 <a href="about.html" class="hover:text-blue-600">Компания</a>
@@ -251,15 +251,15 @@
         </div>
     </header>
 
-    <main class="pt-32 pb-24">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto text-center mb-20">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight uppercase">Каталог продукции</h1>
-                <p class="text-slate-500 font-medium text-lg leading-relaxed">Полный перечень высокотехнологичных изделий ЗАО «МЫС» для железнодорожного транспорта и промышленности.</p>
+    <main class="site-main pt-28 md:pt-32 pb-16 md:pb-24">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="max-w-4xl mx-auto text-center mb-14 md:mb-20">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-5 md:mb-6 tracking-tight uppercase">Каталог продукции</h1>
+                <p class="text-slate-500 font-medium text-base sm:text-lg leading-relaxed">Полный перечень высокотехнологичных изделий ЗАО «МЫС» для железнодорожного транспорта и промышленности.</p>
             </div>
 
-            <div class="max-w-6xl mx-auto mb-16">
-                <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <div class="max-w-6xl mx-auto mb-14 md:mb-16">
+                <div class="section-chip-row flex flex-wrap justify-center gap-3 mb-8">
                     <a href="#ventilation" class="section-anchor inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600">Вентиляционные системы</a>
                     <a href="#cabins" class="section-anchor inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600">Кабины и пульты</a>
                     <a href="#windows" class="section-anchor inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600">Оконные блоки</a>
@@ -286,7 +286,7 @@
 
             <!-- Вентиляторы -->
             <section id="ventilation" class="mb-24 scroll-mt-32">
-                <div class="flex items-center gap-4 mb-12">
+                <div class="flex flex-col items-start sm:flex-row sm:items-center gap-3 sm:gap-4 mb-8 md:mb-12">
                     <div class="h-12 w-1.5 bg-blue-600 rounded-full"></div>
                     <div>
                         <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight">Вентиляционные системы</h2>
@@ -552,7 +552,7 @@
 
             <!-- Кабины и Пульты -->
             <section id="cabins" class="mb-24 scroll-mt-32">
-                <div class="flex items-center gap-4 mb-12">
+                <div class="flex flex-col items-start sm:flex-row sm:items-center gap-3 sm:gap-4 mb-8 md:mb-12">
                     <div class="h-12 w-1.5 bg-indigo-600 rounded-full"></div>
                     <div>
                         <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight">Кабины и Пульты</h2>
@@ -595,7 +595,7 @@
 
             <!-- Оконные блоки -->
             <section id="windows" class="mb-24 scroll-mt-32">
-                <div class="flex items-center gap-4 mb-12">
+                <div class="flex flex-col items-start sm:flex-row sm:items-center gap-3 sm:gap-4 mb-8 md:mb-12">
                     <div class="h-12 w-1.5 bg-emerald-600 rounded-full"></div>
                     <div>
                         <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight">Оконные блоки</h2>
@@ -658,7 +658,7 @@
 
             <!-- Трубы -->
             <section id="pipes" class="scroll-mt-32">
-                <div class="flex items-center gap-4 mb-12">
+                <div class="flex flex-col items-start sm:flex-row sm:items-center gap-3 sm:gap-4 mb-8 md:mb-12">
                     <div class="h-12 w-1.5 bg-orange-600 rounded-full"></div>
                     <div>
                         <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight">Трубы из композита</h2>
@@ -682,7 +682,7 @@
     </main>
 
     <section class="pb-24">
-        <div class="container mx-auto px-6">
+        <div class="container mx-auto px-4 sm:px-6">
             <div class="cta-banner rounded-[2rem] p-8 md:p-12 text-white shadow-[0_35px_80px_-35px_rgba(37,99,235,0.65)]">
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
                     <div class="max-w-2xl">
@@ -690,7 +690,7 @@
                         <h2 class="text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-4">Нужен подбор изделия или расчёт под ваш проект?</h2>
                         <p class="text-sm md:text-base text-slate-200 leading-relaxed">Поможем с подбором конфигурации, подготовкой предложения и уточнением технических параметров для эксплуатации на конкретном объекте или составе.</p>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="cta-actions flex flex-col sm:flex-row gap-3">
                         <a href="contacts.html" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white text-slate-900 font-bold">Отправить запрос</a>
                         <a href="tel:+74843223242" class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/25 bg-white/10 text-white font-bold">Позвонить сейчас</a>
                     </div>
@@ -704,9 +704,9 @@
     </button>
 
     <!-- Футер -->
-    <footer class="bg-slate-900 py-16 text-slate-400">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
+    <footer class="site-footer bg-slate-900 py-16 text-slate-400">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="site-footer-grid grid md:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-12">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
                         <img src="%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F/logo.jpg" alt="ЗАО МЫС" class="h-10 w-auto grayscale brightness-200 rounded">

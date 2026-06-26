@@ -1,5 +1,6 @@
 (() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canHoverPrecisely = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     const setupProgressBar = () => {
         const bar = document.createElement("div");
@@ -110,7 +111,7 @@
     };
 
     const setupTilt = () => {
-        if (prefersReducedMotion) return;
+        if (prefersReducedMotion || !canHoverPrecisely) return;
 
         const cards = document.querySelectorAll(".product-card, .cert-card, article.bg-slate-50");
         cards.forEach((card) => {
