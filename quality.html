@@ -3,14 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Качество ЗАО «МЫС»: сертификаты ISO 22163 и ISO 9001, политика качества, многоступенчатый контроль и подтверждённые производственные стандарты.">
+    <meta name="theme-color" content="#0f172a">
     <title>ЗАО «МЫС» — Качество и Сертификаты</title>
     <link rel="icon" type="image/jpeg" href="%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F/logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="assets/site.css">
+    <script defer src="assets/site.js"></script>
+    <script>
+        function getFallbackAssetPath(path) {
+            if (!path) return path;
+            return path.startsWith('images/') ? path.slice(7) : `images/${path}`;
+        }
+
+        function applyImageFallback(target, attribute = 'src') {
+            if (!target || target.dataset.assetFallbackApplied === '1') return;
+
+            const current = target.getAttribute(attribute);
+            const fallback = getFallbackAssetPath(current);
+
+            if (!current || fallback === current) return;
+
+            target.dataset.assetFallbackApplied = '1';
+            target.setAttribute(attribute, fallback);
+        }
+
+        window.addEventListener('error', (event) => {
+            const target = event.target;
+
+            if (target instanceof HTMLImageElement) {
+                applyImageFallback(target);
+            }
+        }, true);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const favicon = document.querySelector('link[rel="icon"]');
+
+            if (!favicon) return;
+
+            const probe = new Image();
+            probe.onerror = () => applyImageFallback(favicon, 'href');
+            probe.src = favicon.getAttribute('href');
+        });
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 24%), #fff; }
         .nav-link { transition: all 0.2s; }
         .nav-link:hover { color: #2563eb; }
         .cert-card {
@@ -19,6 +59,16 @@
         .cert-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        .floating-action {
+            box-shadow: 0 20px 35px -14px rgba(37, 99, 235, 0.45);
+        }
+        .cta-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #2563eb 100%);
+        }
+        ::selection {
+            background: rgba(37, 99, 235, 0.18);
+            color: #0f172a;
         }
         [x-cloak] { display: none !important; }
     </style>
@@ -32,6 +82,7 @@
         zoom: 1,
         gallery: [],
         currentIndex: 0,
+        showTopButton: false,
         initGallery() {
             this.gallery = Array.from(document.querySelectorAll('[data-gallery-img]')).map(el => ({
                 img: el.getAttribute('data-gallery-img'),
@@ -40,35 +91,51 @@
         },
         openLightbox(img) {
             this.initGallery();
-            this.currentIndex = this.gallery.findIndex(item => item.img === img);
+            const index = this.gallery.findIndex(item => item.img === img);
+            if (index === -1 || !this.gallery.length) return;
+            this.currentIndex = index;
             this.updateLightbox();
             this.lightbox = true;
         },
+        closeLightbox() {
+            this.lightbox = false;
+            this.zoom = 1;
+        },
         next() {
+            if (!this.gallery.length) return;
             this.currentIndex = (this.currentIndex + 1) % this.gallery.length;
             this.updateLightbox();
         },
         prev() {
+            if (!this.gallery.length) return;
             this.currentIndex = (this.currentIndex - 1 + this.gallery.length) % this.gallery.length;
             this.updateLightbox();
         },
         updateLightbox() {
+            if (!this.gallery.length || !this.gallery[this.currentIndex]) return;
             this.lbImg = this.gallery[this.currentIndex].img;
             this.lbTitle = this.gallery[this.currentIndex].title;
             this.zoom = 1;
+        },
+        handleScroll() {
+            this.showTopButton = window.scrollY > 520;
+        },
+        scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }"
+      x-init="handleScroll(); window.addEventListener('scroll', () => handleScroll()); $watch('lightbox', value => { document.documentElement.classList.toggle('overflow-hidden', value); document.body.classList.toggle('overflow-hidden', value); requestAnimationFrame(() => lucide.createIcons()); })"
       @keydown.left.window="if(lightbox) prev()"
       @keydown.right.window="if(lightbox) next()"
-      @keydown.escape.window="lightbox = false">
+      @keydown.escape.window="closeLightbox()">
 
     <!-- Lightbox -->
     <div x-show="lightbox" x-cloak
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
-         class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center select-none"
-         @click="lightbox = false">
+         class="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center select-none"
+         @click="closeLightbox()">
         
         <!-- Controls -->
         <div class="absolute top-0 w-full p-6 flex justify-between items-center z-[110]" @click.stop>
@@ -80,7 +147,7 @@
                     <i data-lucide="zoom-in" x-show="zoom === 1"></i>
                     <i data-lucide="zoom-out" x-show="zoom !== 1"></i>
                 </button>
-                <button @click="lightbox = false" class="text-white/70 hover:text-white transition-colors p-2">
+                <button @click="closeLightbox()" class="text-white/70 hover:text-white transition-colors p-2">
                     <i data-lucide="x" class="w-8 h-8"></i>
                 </button>
             </div>
@@ -96,10 +163,10 @@
 
         <!-- Image Container -->
         <div class="relative w-full h-full flex items-center justify-center p-4 md:p-12 overflow-hidden">
-            <div class="relative transition-transform duration-300 ease-out cursor-zoom-in" 
+            <div class="relative bg-white/95 rounded-2xl shadow-[0_25px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10 p-3 md:p-5 transition-transform duration-300 ease-out cursor-zoom-in max-w-[92vw]" 
                  :style="`transform: scale(${zoom}); cursor: ${zoom > 1 ? 'zoom-out' : 'zoom-in'}`"
                  @click.stop="zoom = zoom === 1 ? 2.5 : 1">
-                <img :src="lbImg" class="max-h-[75vh] md:max-h-[80vh] w-auto rounded shadow-2xl pointer-events-none">
+                <img :src="lbImg" :alt="lbTitle" class="block max-w-[84vw] max-h-[68vh] md:max-h-[74vh] w-auto h-auto object-contain rounded-xl bg-white pointer-events-none">
             </div>
             <div class="absolute bottom-12 text-center max-w-2xl px-4 z-[110] transition-all duration-300" 
                  :class="zoom > 1 ? 'opacity-0 translate-y-8 pointer-events-none' : 'opacity-100 translate-y-0'"
@@ -179,6 +246,25 @@
             <div class="max-w-4xl mx-auto text-center mb-16">
                 <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight uppercase">Качество</h1>
                 <p class="text-slate-500 font-medium">Безупречное качество — основа нашей репутации и залог надежности выпускаемой продукции.</p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto mb-16">
+                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm text-center">
+                    <div class="text-blue-600 text-2xl font-extrabold" data-counter="5" data-counter-suffix="+">5+</div>                    
+                    <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Документов и сертификатов</div>
+                </div>
+                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm text-center">
+                    <div class="text-blue-600 text-2xl font-extrabold">IRIS</div>
+                    <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Железнодорожный стандарт</div>
+                </div>
+                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm text-center">
+                    <div class="text-blue-600 text-2xl font-extrabold" data-counter="100" data-counter-suffix="%">100%</div>
+                    <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Контроль ключевых этапов</div>
+                </div>
+                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm text-center">
+                    <div class="text-blue-600 text-2xl font-extrabold">ISO</div>
+                    <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Система менеджмента качества</div>
+                </div>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mb-20">
@@ -263,7 +349,7 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">Сертификация IRIS</h4>
-                                <p class="text-slate-500 text-sm leading-relaxed">ЗАО «МЫС» успешно подтверждает соответствие требованиям международного стандарта ISO 22163, что гарантирует высокое качество продукции для мировых лидеров ж/д отрасли.</p>
+                                <p class="text-slate-500 text-sm leading-relaxed">Официальные публикации компании подтверждают прохождение аудита по ISO 22163:2023 в 2025 году и развитие системы менеджмента качества для железнодорожной отрасли.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 items-start">
@@ -271,8 +357,8 @@
                                 <i data-lucide="shield-check"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">ISO 3834-2</h4>
-                                <p class="text-slate-500 text-sm leading-relaxed">Соответствие требованиям к качеству выполнения сварочных работ, что критически важно для производства металлических каркасов кабин и вентиляционных систем.</p>
+                                <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">ISO 9001 и ГОСТ Р ИСО 9001</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed">На странице представлены действующие материалы по ISO 9001:2015 и ГОСТ Р ИСО 9001, отражающие систему менеджмента качества предприятия.</p>
                             </div>
                         </div>
                         <div class="flex gap-6 items-start">
@@ -280,8 +366,8 @@
                                 <i data-lucide="check-circle"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">Многоступенчатый контроль</h4>
-                                <p class="text-slate-500 text-sm leading-relaxed">Собственная лаборатория и отдел технического контроля (ОТК) обеспечивают проверку изделий на всех этапах: от входного контроля сырья до финальных испытаний готовой продукции.</p>
+                                <h4 class="font-bold text-lg mb-2 uppercase tracking-tight">Подтверждённая производственная дисциплина</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed">В новостях и материалах компании подчёркиваются модернизация производства, контроль качества и развитие отраслевых компетенций без неподтверждённых заявлений сверх опубликованных документов.</p>
                             </div>
                         </div>
                     </div>
@@ -289,6 +375,28 @@
             </div>
         </div>
     </main>
+
+    <section class="pb-24">
+        <div class="container mx-auto px-6">
+            <div class="cta-banner rounded-[2rem] p-8 md:p-12 text-white shadow-[0_35px_80px_-35px_rgba(37,99,235,0.65)]">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                    <div class="max-w-2xl">
+                        <div class="text-[10px] font-bold uppercase tracking-[0.35em] text-blue-200 mb-4">Надёжность</div>
+                        <h2 class="text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-4">Нужно подтвердить качество и производственную зрелость поставщика?</h2>
+                        <p class="text-sm md:text-base text-slate-200 leading-relaxed">Предоставим информацию о системе качества, сертификации, производственном контроле и опыте реализации отраслевых проектов.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="contacts.html" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white text-slate-900 font-bold">Запросить информацию</a>
+                        <a href="about.html" class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/25 bg-white/10 text-white font-bold">О производстве</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <button x-show="showTopButton" x-cloak @click="scrollToTop()" class="floating-action fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-all">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
 
     <!-- Футер -->
     <footer class="bg-slate-900 py-16 text-slate-400">

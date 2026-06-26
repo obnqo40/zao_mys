@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Каталог продукции ЗАО «МЫС»: вентиляционные системы, модульные кабины, оконные блоки и композитные трубы для железнодорожной и промышленной отрасли.">
+    <meta name="theme-color" content="#0f172a">
     <title>ЗАО «МЫС» — Продукция (Полный каталог)</title>
     <link rel="icon" type="image/jpeg" href="%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F/logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="assets/site.css">
+    <script defer src="assets/site.js"></script>
     <script>
         function getFallbackAssetPath(path) {
             if (!path) return path;
@@ -46,7 +50,7 @@
         });
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 24%), #fff; }
         .nav-link { transition: all 0.2s; }
         .nav-link:hover { color: #2563eb; }
         .product-card {
@@ -57,6 +61,24 @@
             transform: translateY(-8px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
             border-color: #3b82f6;
+        }
+        .section-anchor {
+            transition: all 0.25s ease;
+        }
+        .section-anchor:hover {
+            transform: translateY(-2px);
+            border-color: #93c5fd;
+            color: #2563eb;
+        }
+        .floating-action {
+            box-shadow: 0 20px 35px -14px rgba(37, 99, 235, 0.45);
+        }
+        .cta-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #2563eb 100%);
+        }
+        ::selection {
+            background: rgba(37, 99, 235, 0.18);
+            color: #0f172a;
         }
         [x-cloak] { display: none !important; }
     </style>
@@ -70,6 +92,7 @@
         zoom: 1,
         gallery: [],
         currentIndex: 0,
+        showTopButton: false,
         initGallery() {
             this.gallery = Array.from(document.querySelectorAll('[data-gallery-img]')).map(el => ({
                 img: el.getAttribute('data-gallery-img'),
@@ -103,9 +126,15 @@
             this.lbImg = this.gallery[this.currentIndex].img;
             this.lbTitle = this.gallery[this.currentIndex].title;
             this.zoom = 1;
+        },
+        handleScroll() {
+            this.showTopButton = window.scrollY > 520;
+        },
+        scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }"
-      x-init="$watch('lightbox', value => { document.documentElement.classList.toggle('overflow-hidden', value); document.body.classList.toggle('overflow-hidden', value); requestAnimationFrame(() => lucide.createIcons()); })"
+      x-init="handleScroll(); window.addEventListener('scroll', () => handleScroll()); $watch('lightbox', value => { document.documentElement.classList.toggle('overflow-hidden', value); document.body.classList.toggle('overflow-hidden', value); requestAnimationFrame(() => lucide.createIcons()); })"
       @keydown.left.window="if(lightbox) prev()"
       @keydown.right.window="if(lightbox) next()"
       @keydown.escape.window="closeLightbox()">
@@ -229,8 +258,34 @@
                 <p class="text-slate-500 font-medium text-lg leading-relaxed">Полный перечень высокотехнологичных изделий ЗАО «МЫС» для железнодорожного транспорта и промышленности.</p>
             </div>
 
+            <div class="max-w-6xl mx-auto mb-16">
+                <div class="flex flex-wrap justify-center gap-3 mb-8">
+                    <a href="#ventilation" class="section-anchor inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600">Вентиляционные системы</a>
+                    <a href="#cabins" class="section-anchor inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600">Кабины и пульты</a>
+                    <a href="#windows" class="section-anchor inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600">Оконные блоки</a>
+                    <a href="#pipes" class="section-anchor inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600">Трубы из композита</a>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                        <div class="text-blue-600 font-bold text-[10px] uppercase tracking-[0.25em] mb-3">Инженерия</div>
+                        <h2 class="text-lg font-bold text-slate-900 mb-2 uppercase tracking-tight">Подбор под задачу</h2>
+                        <p class="text-sm text-slate-500 leading-relaxed">Помогаем подобрать исполнение изделия под конкретный тип локомотива, состав оборудования и условия эксплуатации.</p>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                        <div class="text-blue-600 font-bold text-[10px] uppercase tracking-[0.25em] mb-3">Производство</div>
+                        <h2 class="text-lg font-bold text-slate-900 mb-2 uppercase tracking-tight">Серийно и по ТЗ</h2>
+                        <p class="text-sm text-slate-500 leading-relaxed">Изготавливаем как серийные позиции, так и нестандартные решения по рабочей конструкторской документации заказчика.</p>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                        <div class="text-blue-600 font-bold text-[10px] uppercase tracking-[0.25em] mb-3">Отрасли</div>
+                        <h2 class="text-lg font-bold text-slate-900 mb-2 uppercase tracking-tight">Ж/д и промышленность</h2>
+                        <p class="text-sm text-slate-500 leading-relaxed">Основной фокус на железнодорожном транспорте, но линейка продукции также закрывает задачи смежных промышленных направлений.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Вентиляторы -->
-            <section class="mb-24">
+            <section id="ventilation" class="mb-24 scroll-mt-32">
                 <div class="flex items-center gap-4 mb-12">
                     <div class="h-12 w-1.5 bg-blue-600 rounded-full"></div>
                     <div>
@@ -496,7 +551,7 @@
             </section>
 
             <!-- Кабины и Пульты -->
-            <section class="mb-24">
+            <section id="cabins" class="mb-24 scroll-mt-32">
                 <div class="flex items-center gap-4 mb-12">
                     <div class="h-12 w-1.5 bg-indigo-600 rounded-full"></div>
                     <div>
@@ -539,7 +594,7 @@
             </section>
 
             <!-- Оконные блоки -->
-            <section class="mb-24">
+            <section id="windows" class="mb-24 scroll-mt-32">
                 <div class="flex items-center gap-4 mb-12">
                     <div class="h-12 w-1.5 bg-emerald-600 rounded-full"></div>
                     <div>
@@ -602,7 +657,7 @@
             </section>
 
             <!-- Трубы -->
-            <section>
+            <section id="pipes" class="scroll-mt-32">
                 <div class="flex items-center gap-4 mb-12">
                     <div class="h-12 w-1.5 bg-orange-600 rounded-full"></div>
                     <div>
@@ -625,6 +680,28 @@
             </section>
         </div>
     </main>
+
+    <section class="pb-24">
+        <div class="container mx-auto px-6">
+            <div class="cta-banner rounded-[2rem] p-8 md:p-12 text-white shadow-[0_35px_80px_-35px_rgba(37,99,235,0.65)]">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                    <div class="max-w-2xl">
+                        <div class="text-[10px] font-bold uppercase tracking-[0.35em] text-blue-200 mb-4">Проектная поддержка</div>
+                        <h2 class="text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-4">Нужен подбор изделия или расчёт под ваш проект?</h2>
+                        <p class="text-sm md:text-base text-slate-200 leading-relaxed">Поможем с подбором конфигурации, подготовкой предложения и уточнением технических параметров для эксплуатации на конкретном объекте или составе.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="contacts.html" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white text-slate-900 font-bold">Отправить запрос</a>
+                        <a href="tel:+74843223242" class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/25 bg-white/10 text-white font-bold">Позвонить сейчас</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <button x-show="showTopButton" x-cloak @click="scrollToTop()" class="floating-action fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-all">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
 
     <!-- Футер -->
     <footer class="bg-slate-900 py-16 text-slate-400">

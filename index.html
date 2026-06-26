@@ -3,14 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ЗАО «МЫС» — проектирование и производство изделий из композитов и металла для железнодорожной отрасли, промышленности и импортозамещающих проектов.">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="site.webmanifest">
     <title>ЗАО «МЫС» — Промышленное производство</title>
     <link rel="icon" type="image/jpeg" href="%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F/logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="assets/site.css">
+    <script defer src="assets/site.js"></script>
+    <script>
+        function getFallbackAssetPath(path) {
+            if (!path) return path;
+            return path.startsWith('images/') ? path.slice(7) : `images/${path}`;
+        }
+
+        function applyImageFallback(target, attribute = 'src') {
+            if (!target || target.dataset.assetFallbackApplied === '1') return;
+
+            const current = target.getAttribute(attribute);
+            const fallback = getFallbackAssetPath(current);
+
+            if (!current || fallback === current) return;
+
+            target.dataset.assetFallbackApplied = '1';
+            target.setAttribute(attribute, fallback);
+        }
+
+        window.addEventListener('error', (event) => {
+            const target = event.target;
+
+            if (target instanceof HTMLImageElement) {
+                applyImageFallback(target);
+            }
+        }, true);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const favicon = document.querySelector('link[rel="icon"]');
+
+            if (favicon) {
+                const faviconProbe = new Image();
+                faviconProbe.onerror = () => applyImageFallback(favicon, 'href');
+                faviconProbe.src = favicon.getAttribute('href');
+            }
+
+            const hero = document.querySelector('.hero-bg');
+
+            if (!hero) return;
+
+            const rootHeroPath = '%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F/2%D0%A2%D0%AD25%D0%9A%D0%BC-0026.jfif';
+            const fallbackHeroPath = getFallbackAssetPath(rootHeroPath);
+            const heroProbe = new Image();
+
+            heroProbe.onerror = () => {
+                hero.style.backgroundImage = `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('${fallbackHeroPath}')`;
+            };
+            heroProbe.src = rootHeroPath;
+        });
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 22%), #fff; }
         .hero-bg {
             background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
                         url('%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F/2%D0%A2%D0%AD25%D0%9A%D0%BC-0026.jfif');
@@ -21,6 +75,16 @@
             transition: all 0.2s;
         }
         .nav-link:hover { color: #2563eb; }
+        .floating-action {
+            box-shadow: 0 20px 35px -14px rgba(37, 99, 235, 0.45);
+        }
+        .cta-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #2563eb 100%);
+        }
+        ::selection {
+            background: rgba(37, 99, 235, 0.18);
+            color: #0f172a;
+        }
         [x-cloak] { display: none !important; }
     </style>
 </head>
@@ -33,6 +97,7 @@
         zoom: 1,
         gallery: [],
         currentIndex: 0,
+        showTopButton: false,
         initGallery() {
             this.gallery = Array.from(document.querySelectorAll('[data-gallery-img]')).map(el => ({
                 img: el.getAttribute('data-gallery-img'),
@@ -41,35 +106,51 @@
         },
         openLightbox(img) {
             this.initGallery();
-            this.currentIndex = this.gallery.findIndex(item => item.img === img);
+            const index = this.gallery.findIndex(item => item.img === img);
+            if (index === -1 || !this.gallery.length) return;
+            this.currentIndex = index;
             this.updateLightbox();
             this.lightbox = true;
         },
+        closeLightbox() {
+            this.lightbox = false;
+            this.zoom = 1;
+        },
         next() {
+            if (!this.gallery.length) return;
             this.currentIndex = (this.currentIndex + 1) % this.gallery.length;
             this.updateLightbox();
         },
         prev() {
+            if (!this.gallery.length) return;
             this.currentIndex = (this.currentIndex - 1 + this.gallery.length) % this.gallery.length;
             this.updateLightbox();
         },
         updateLightbox() {
+            if (!this.gallery.length || !this.gallery[this.currentIndex]) return;
             this.lbImg = this.gallery[this.currentIndex].img;
             this.lbTitle = this.gallery[this.currentIndex].title;
             this.zoom = 1;
+        },
+        handleScroll() {
+            this.showTopButton = window.scrollY > 520;
+        },
+        scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }"
+      x-init="handleScroll(); window.addEventListener('scroll', () => handleScroll()); $watch('lightbox', value => { document.documentElement.classList.toggle('overflow-hidden', value); document.body.classList.toggle('overflow-hidden', value); requestAnimationFrame(() => lucide.createIcons()); })"
       @keydown.left.window="if(lightbox) prev()"
       @keydown.right.window="if(lightbox) next()"
-      @keydown.escape.window="lightbox = false">
+      @keydown.escape.window="closeLightbox()">
 
     <!-- Lightbox -->
     <div x-show="lightbox" x-cloak
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
-         class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center select-none"
-         @click="lightbox = false">
+         class="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center select-none"
+         @click="closeLightbox()">
         
         <!-- Controls -->
         <div class="absolute top-0 w-full p-6 flex justify-between items-center z-[110]" @click.stop>
@@ -81,7 +162,7 @@
                     <i data-lucide="zoom-in" x-show="zoom === 1"></i>
                     <i data-lucide="zoom-out" x-show="zoom !== 1"></i>
                 </button>
-                <button @click="lightbox = false" class="text-white/70 hover:text-white transition-colors p-2">
+                <button @click="closeLightbox()" class="text-white/70 hover:text-white transition-colors p-2">
                     <i data-lucide="x" class="w-8 h-8"></i>
                 </button>
             </div>
@@ -97,10 +178,10 @@
 
         <!-- Image Container -->
         <div class="relative w-full h-full flex items-center justify-center p-4 md:p-12 overflow-hidden">
-            <div class="relative transition-transform duration-300 ease-out cursor-zoom-in" 
+            <div class="relative bg-white/95 rounded-2xl shadow-[0_25px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10 p-3 md:p-5 transition-transform duration-300 ease-out cursor-zoom-in max-w-[92vw]" 
                  :style="`transform: scale(${zoom}); cursor: ${zoom > 1 ? 'zoom-out' : 'zoom-in'}`"
                  @click.stop="zoom = zoom === 1 ? 2.5 : 1">
-                <img :src="lbImg" class="max-h-[75vh] md:max-h-[80vh] w-auto rounded shadow-2xl pointer-events-none">
+                <img :src="lbImg" :alt="lbTitle" class="block max-w-[84vw] max-h-[68vh] md:max-h-[74vh] w-auto h-auto object-contain rounded-xl bg-white pointer-events-none">
             </div>
             <div class="absolute bottom-12 text-center max-w-2xl px-4 z-[110] transition-all duration-300" 
                  :class="zoom > 1 ? 'opacity-0 translate-y-8 pointer-events-none' : 'opacity-100 translate-y-0'"
@@ -180,13 +261,13 @@
         <div class="container mx-auto px-6">
             <div class="max-w-3xl">
                 <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 px-4 py-1.5 rounded-full text-xs font-bold text-blue-600 mb-8 uppercase tracking-wider">
-                    Лидер отрасли с 2006 года
+                    Официальные материалы и подтверждаемые данные
                 </div>
                 <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
                     Проектирование и производство изделий из композитов
                 </h1>
                 <p class="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl font-medium">
-                    Динамично развивающееся производство по проектированию и изготовлению изделий из композитов и металла для машиностроительной отрасли и РЖД.
+                    Производство по проектированию и изготовлению изделий из композитов и металла для машиностроительной отрасли, железнодорожного транспорта и импортозамещающих проектов.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="products.html" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-xl font-bold text-center transition-all shadow-lg shadow-blue-100">
@@ -195,6 +276,93 @@
                     <a href="about.html" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-8 py-3.5 rounded-xl font-bold text-center transition-all">
                         О компании
                     </a>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-10 max-w-3xl">
+                    <div class="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl px-4 py-4">
+                        <div class="text-blue-600 text-xl font-extrabold" data-counter="2013">2013</div>
+                        <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Открытые документы с</div>
+                    </div>
+                    <div class="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl px-4 py-4">
+                        <div class="text-blue-600 text-xl font-extrabold" data-counter="2025">2025</div>
+                        <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Аудит ISO 22163</div>
+                    </div>
+                    <div class="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl px-4 py-4">
+                        <div class="text-blue-600 text-xl font-extrabold">IRIS</div>
+                        <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Сертификация</div>
+                    </div>
+                    <div class="bg-white/80 backdrop-blur border border-slate-200 rounded-2xl px-4 py-4">
+                        <div class="text-blue-600 text-xl font-extrabold">РЖД</div>
+                        <div class="text-[10px] uppercase tracking-[0.25em] text-slate-500 font-bold mt-1">Железнодорожная отрасль</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-6 items-stretch">
+                <div class="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-[0_35px_80px_-40px_rgba(15,23,42,0.85)]">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.35em] text-blue-200 mb-4">Проектный цикл</div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold uppercase tracking-tight mb-5">От инженерной идеи до стабильной эксплуатации</h2>
+                    <p class="text-sm md:text-base text-slate-300 leading-relaxed mb-8 max-w-2xl">Компания показывает полный цикл работы над промышленными изделиями: проектирование, изготовление, контроль качества и развитие решений под задачи заказчика.</p>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                            <div class="text-blue-300 text-sm font-black uppercase tracking-[0.3em] mb-3">01</div>
+                            <h3 class="font-bold uppercase tracking-tight mb-2">Анализ задачи</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Подбираем решение под тип подвижного состава, условия эксплуатации и требования заказчика.</p>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                            <div class="text-blue-300 text-sm font-black uppercase tracking-[0.3em] mb-3">02</div>
+                            <h3 class="font-bold uppercase tracking-tight mb-2">Инженерная проработка</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Используем опыт работы с композитами, металлом и железнодорожными стандартами.</p>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                            <div class="text-blue-300 text-sm font-black uppercase tracking-[0.3em] mb-3">03</div>
+                            <h3 class="font-bold uppercase tracking-tight mb-2">Производство и контроль</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Выпускаем изделия серийно и по ТЗ, сопровождая каждый этап контролем качества.</p>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                            <div class="text-blue-300 text-sm font-black uppercase tracking-[0.3em] mb-3">04</div>
+                            <h3 class="font-bold uppercase tracking-tight mb-2">Сервис и развитие</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Поддерживаем проект после поставки и развиваем продукт вместе с заказчиком.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid gap-4">
+                    <div class="bg-white border border-slate-100 rounded-[2rem] p-7">
+                        <div class="text-blue-600 font-bold text-[10px] uppercase tracking-[0.35em] mb-3">Почему это работает</div>
+                        <h3 class="text-2xl font-extrabold text-slate-900 uppercase tracking-tight mb-4">Сильная подача доверия</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-6">Клиенту важно увидеть не просто каталог, а понятный профиль предприятия. Этот блок делает подачу системной и опирается на направления, подтверждаемые официальными материалами компании.</p>
+                        <div class="space-y-3 text-sm text-slate-600">
+                            <div class="flex items-center gap-3">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                                <span>Фокус на импортозамещении и сложных инженерных проектах</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                                <span>Производственные мощности и контроль качества в одной цепочке</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                                <span>Понятные сценарии для клиента: изучить, довериться, связаться</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid sm:grid-cols-3 gap-4">
+                        <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center">
+                            <div class="text-blue-600 text-3xl font-extrabold mb-2" data-counter="4">4</div>
+                            <div class="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-bold">Этапа цикла</div>
+                        </div>
+                        <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center">
+                            <div class="text-blue-600 text-3xl font-extrabold mb-2" data-counter="6">6</div>
+                            <div class="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-bold">Ключевых направлений</div>
+                        </div>
+                        <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center">
+                            <div class="text-blue-600 text-3xl font-extrabold mb-2" data-counter="100" data-counter-suffix="%">100%</div>
+                            <div class="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-bold">Фокус на результате</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -291,12 +459,12 @@
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
-                    <div class="text-2xl font-extrabold text-blue-600 mb-1 uppercase">30+</div>
-                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Лет опыта</div>
+                    <div class="text-2xl font-extrabold text-blue-600 mb-1 uppercase" data-counter="2013">2013</div>
+                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Документы с</div>
                 </div>
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
-                    <div class="text-2xl font-extrabold text-blue-600 mb-1 uppercase">500+</div>
-                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Проектов</div>
+                    <div class="text-2xl font-extrabold text-blue-600 mb-1 uppercase" data-counter="2025">2025</div>
+                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Аудит ISO 22163</div>
                 </div>
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
                     <div class="text-2xl font-extrabold text-blue-600 mb-1 uppercase">ISO</div>
@@ -304,7 +472,7 @@
                 </div>
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
                     <div class="text-2xl font-extrabold text-blue-600 mb-1 uppercase">РЖД</div>
-                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Ключевой партнер</div>
+                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Отраслевой фокус</div>
                 </div>
             </div>
         </div>
@@ -360,6 +528,28 @@
         </div>
     </section>
 
+    <section class="pb-24">
+        <div class="container mx-auto px-6">
+            <div class="cta-banner rounded-[2rem] p-8 md:p-12 text-white shadow-[0_35px_80px_-35px_rgba(37,99,235,0.65)]">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                    <div class="max-w-2xl">
+                        <div class="text-[10px] font-bold uppercase tracking-[0.35em] text-blue-200 mb-4">Сотрудничество</div>
+                        <h2 class="text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-4">Запускаете новый проект или ищете поставщика под импортозамещение?</h2>
+                        <p class="text-sm md:text-base text-slate-200 leading-relaxed">Подберём решение, расскажем о производственных возможностях и подготовим предложение по вашим техническим требованиям.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="contacts.html" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white text-slate-900 font-bold">Связаться с нами</a>
+                        <a href="products.html" class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/25 bg-white/10 text-white font-bold">Смотреть каталог</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <button x-show="showTopButton" x-cloak @click="scrollToTop()" class="floating-action fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-all">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
     <!-- Футер -->
     <footer class="bg-slate-900 py-16 text-slate-400">
         <div class="container mx-auto px-6">
@@ -403,8 +593,8 @@
             <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-[10px] uppercase tracking-widest">© 2026 ЗАО «МЫС». Все права защищены.</p>
                 <div class="flex gap-6 text-[10px] uppercase tracking-widest">
-                    <a href="#" class="hover:text-white">Политика конфиденциальности</a>
-                    <a href="#" class="hover:text-white">Правовая информация</a>
+                    <a href="privacy.html" class="hover:text-white">Политика конфиденциальности</a>
+                    <a href="legal.html" class="hover:text-white">Правовая информация</a>
                 </div>
             </div>
         </div>
